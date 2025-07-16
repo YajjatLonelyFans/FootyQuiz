@@ -1,5 +1,9 @@
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import './App.css'
+import io from 'socket.io-client'
+import {toast , ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+const socket = io('http://localhost:3000') 
 
 function App() {
   const [name, setName] = useState("")
@@ -11,6 +15,29 @@ function App() {
   const [seconds, setSeconds] = useState(30) // Example timer value
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null)
   const [answered, setAnswered] = useState(false)
+
+  useEffect(() => {
+    if(name){
+      socket.emit("joinRoom", { name, room })
+    }
+  }, [info])
+  useEffect(() => {
+    socket.on("message", (message) => {
+      toast(`${message} joined`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    });
+    return () => {
+      socket.off("message");
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,7 +79,8 @@ function App() {
       ) : (
         <div className="bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-xl flex flex-col items-center">
           <h1 className="text-4xl font-bold text-white mb-6 tracking-wide">QuizzyRooms</h1>
-          <p className="text-gray-300 mb-6 text-lg">Room id: <span className="font-mono text-blue-400">{room}</span></p>
+          <p className="text-gray-300 mb-6 text-lg">Room id: {room}</p>
+          <ToastContainer />
 
           {question ? (
             <div className='quiz-div w-full'>
