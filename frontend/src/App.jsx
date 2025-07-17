@@ -1,4 +1,4 @@
-import { useState , useEffect} from 'react'
+import { useState , useEffect, use} from 'react'
 import './App.css'
 import io from 'socket.io-client'
 import {toast , ToastContainer} from 'react-toastify'
@@ -12,15 +12,58 @@ function App() {
   const [question, setQuestion] = useState("")
   const [options, setOptions] = useState([])
   const [scores, setScores] = useState([])
-  const [seconds, setSeconds] = useState(30) // Example timer value
+  const [seconds, setSeconds] = useState(30) 
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(null)
   const [answered, setAnswered] = useState(false)
+  const [winner, setWinner] = useState(null)
 
   useEffect(() => {
-    if(name){
-      socket.emit("joinRoom", { name, room })
+    if(seconds ===0) return;
+    const timeInterval = setInterval(() => {
+      setSeconds(prev => prev - 1)
+    }, 1000)
+    return () => clearInterval(timeInterval)
+  }, [seconds])
+
+  useEffect(() => {
+  if(info) socket.emit("joinRoom", { name, room })
+}, [info]);
+
+
+  useEffect(() => {
+    socket.on('newQuestion' , (data)=>{
+      setQuestion(data.question)
+      setOptions(data.answers)
+      setScores(data.scores)
+      setSeconds(30)
+      setAnswered(false)
+      setSelectedAnswerIndex(null)
+    })
+    socket.on('answerResult', (data) => {
+      if(data.isCorrect) {
+        toast.success(`${data.playerName} answered correctly!`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark"
+        })
+      }
+      setScores(data.scores)
+    })
+    socket.on('gameOver', (data) => {
+      setWinner(data.winner)
+    })
+    return () => {
+      socket.off('newQuestion');
+      socket.off('answerResult');
+      socket.off('gameOver');
     }
-  }, [info])
+  },[])
+
   useEffect(() => {
     socket.on("message", (message) => {
       toast(`${message} joined`, {
@@ -31,7 +74,7 @@ function App() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "dark",
+        theme: "dark"
       });
     });
     return () => {
@@ -47,9 +90,12 @@ function App() {
     }
   }
 
-  const handleAnswer = (index) => {
-    setSelectedAnswerIndex(index)
-    setAnswered(true)
+  const handleAnswer = (answerIndex) => {
+    if(!answered) {
+      setSelectedAnswerIndex(answerIndex);
+      setAnswered(true);
+      socket.emit("submitAnswer", { room, answerIndex });
+    }
     
   }
 
@@ -57,7 +103,7 @@ function App() {
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       {!info ? (
         <div className="bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-md flex flex-col items-center">
-          <h1 className="text-4xl font-bold text-white mb-8 tracking-wide">QuizzyRooms</h1>
+          <h1 className="text-4xl font-bold text-white mb-8 tracking-wide">FootyQuiz</h1>
           <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
             <input
               required
@@ -76,9 +122,21 @@ function App() {
             <button type='submit' className="mt-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition">Join</button>
           </form>
         </div>
+      ) : winner ? (
+        <div className="bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-md flex flex-col items-center">
+          <h1 className="text-4xl font-bold text-white mb-6 tracking-wide">🏆 Winner!</h1>
+          <p className="text-white text-2xl mb-4">{winner} has won the game 🎉</p>
+          <p className="text-gray-300 mb-8 text-lg">Room ID: {room}</p>
+          <button
+        onClick={() => window.location.reload()}
+        className="px-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg transition"
+      >
+        Play Again
+      </button>
+    </div>
       ) : (
         <div className="bg-gray-800 rounded-xl shadow-lg p-8 w-full max-w-xl flex flex-col items-center">
-          <h1 className="text-4xl font-bold text-white mb-6 tracking-wide">QuizzyRooms</h1>
+          <h1 className="text-4xl font-bold text-white mb-6 tracking-wide">FootyQuiz</h1>
           <p className="text-gray-300 mb-6 text-lg">Room id: {room}</p>
           <ToastContainer />
 
