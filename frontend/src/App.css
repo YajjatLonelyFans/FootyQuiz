@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+:root {
+  --color-bg: #10172a;
+  --color-bg-card: #18213a;
+  --color-primary: #ffd700;
+  --color-secondary: #2563eb;
+  --color-accent: #60a5fa;
+  --color-text: #fff;
+  --color-text-muted: #cbd5e1;
+  --color-border: #22315a;
+}
+
+/* Mature football quiz background */
+.mature-bg {
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-card) 100%);
+}
+
+.glass-card {
+  background: rgba(24, 33, 58, 0.92);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 32px 0 rgba(16, 23, 42, 0.18);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(6px);
+}
+
+.quiz-div {
+  background: var(--color-bg-card);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 32px 0 rgba(16, 23, 42, 0.18);
+  border: 1.5px solid var(--color-primary);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.options {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+  border-radius: 0.75rem;
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+}
+.options.selected {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+}
+.options:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.options:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border-color: var(--color-primary);
+}
+
+.question-text {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  color: var(--color-text);
+  text-shadow: 0 1px 4px #0006;
+}
+
+.leaderboard-scoreboard {
+  background: var(--color-bg-card);
+  border-radius: 1.25rem;
+  border: 1.5px solid var(--color-primary);
+  box-shadow: 0 4px 24px 0 rgba(16, 23, 42, 0.18);
+  color: var(--color-text);
+}
+
+input, textarea {
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary)33;
+}
+
+button {
+  background: var(--color-primary);
+  color: var(--color-bg);
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+button:hover:not(:disabled) {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}

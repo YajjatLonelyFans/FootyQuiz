@@ -599,6 +599,9 @@ io.on("connection", (socket) => {
       }
     }
   });
+  socket.on("sendMessage", ({ room, message , name }) => {
+    io.to(room).emit("chatMessage", { name, message });
+  })
 
   socket.on("disconnect", () => {
     for (const room in rooms) {
