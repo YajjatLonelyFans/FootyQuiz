@@ -128,49 +128,67 @@ function App() {
         </div>
       ) : (
         <div className="flex flex-col lg:flex-row w-full h-screen overflow-hidden">
-          <div className="flex-1 bg-transparent p-4 lg:p-8 flex flex-col items-center lg:pr-[400px]">
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-[var(--color-primary)] mb-4 lg:mb-6 tracking-widest flex items-center gap-3">
-              <FaFutbol className="text-[var(--color-primary)]" />
-              <span className="hidden sm:inline">FootyQuiz</span>
-            </h1>
-            <p className="text-[var(--color-text-muted)] mb-4 lg:mb-6 text-sm lg:text-lg">Room id: {room}</p>
-            <ToastContainer />
-            <div className="w-full max-w-xl mb-4">
-              <Leaderboard scores={scores} currentUser={name} />
+          
+          <div className="flex-1 bg-transparent p-4 lg:p-8 flex flex-col items-center justify-start">
+           
+            <div className="w-full max-w-4xl flex flex-col items-center mb-6">
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-[var(--color-primary)] mb-4 tracking-widest flex items-center gap-3">
+                <FaFutbol className="text-[var(--color-primary)]" />
+                <span className="hidden sm:inline">FootyQuiz</span>
+              </h1>
+              <p className="text-[var(--color-text-muted)] text-sm lg:text-lg">Room id: {room}</p>
             </div>
-            {question ? (
-              <div className="quiz-div w-full max-w-xl mx-auto">
-                <p className="text-right text-[var(--color-accent)] mb-2 text-sm lg:text-lg flex items-center gap-2 justify-end">
-                  <FaStopwatch className="text-[var(--color-primary)]" />
-                  <span className="font-semibold text-white">{seconds}</span>
-                </p>
-                <div className="question mb-4 lg:mb-6">
-                  <p className="question-text text-lg lg:text-2xl font-extrabold text-center drop-shadow-lg leading-tight">
-                    {question}
-                  </p>
-                </div>
-                <ul className="flex flex-col gap-3 lg:gap-4 mb-4 lg:mb-8">
-                  {options.map((answer, index) => (
-                    <li key={index} className="w-full">
-                      <button
-                        className={`options w-full py-2 lg:py-3 px-3 lg:px-4 text-sm lg:text-lg font-bold border-2 transition focus:outline-none shadow-lg ${
-                          selectedAnswerIndex === index 
-                            ? 'selected' 
-                            : ''
-                        } ${answered ? 'opacity-60 cursor-not-allowed' : ''}`}
-                        onClick={() => handleAnswer(index)}
-                        disabled={answered}
-                      >
-                        {answer}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+
+            <ToastContainer />
+
+           
+            <div className="w-full max-w-4xl flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
+             
+              <div className="w-full lg:w-80 flex-shrink-0 order-2 lg:order-1">
+                <Leaderboard scores={scores} currentUser={name} />
               </div>
-            ) : (
-              <p className="text-[var(--color-text-muted)] text-lg">Loading question...</p>
-            )}
+
+             
+              <div className="flex-1 max-w-2xl order-1 lg:order-2">
+                {question ? (
+                  <div className="quiz-div w-full">
+                    <p className="text-right text-[var(--color-accent)] mb-4 text-sm lg:text-lg flex items-center gap-2 justify-end">
+                      <FaStopwatch className="text-[var(--color-primary)]" />
+                      <span className="font-semibold text-white text-2xl lg:text-3xl">{seconds}</span>
+                    </p>
+                    <div className="question mb-6 lg:mb-8">
+                      <p className="question-text text-xl lg:text-3xl font-extrabold text-center drop-shadow-lg leading-tight text-white">
+                        {question}
+                      </p>
+                    </div>
+                    <ul className="flex flex-col gap-3 lg:gap-4">
+                      {options.map((answer, index) => (
+                        <li key={index} className="w-full">
+                          <button
+                            className={`options w-full py-3 lg:py-4 px-4 lg:px-6 text-base lg:text-lg font-bold border-2 transition focus:outline-none shadow-lg rounded-lg ${
+                              selectedAnswerIndex === index 
+                                ? 'selected' 
+                                : ''
+                            } ${answered ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            onClick={() => handleAnswer(index)}
+                            disabled={answered}
+                          >
+                            {answer}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-[var(--color-text-muted)] text-xl lg:text-2xl">Loading question...</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+
+        
           <div className="fixed lg:relative top-0 right-0 w-full lg:w-[400px] h-full lg:h-auto z-50 lg:z-auto">
             <SideBar name={name} room={room} />
           </div>
