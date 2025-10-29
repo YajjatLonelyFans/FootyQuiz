@@ -131,14 +131,6 @@ function App() {
           
           <div className="flex-1 bg-transparent p-4 lg:p-8 flex flex-col items-center justify-start">
            
-            <div className="w-full max-w-4xl flex flex-col items-center mb-6">
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-[var(--color-primary)] mb-4 tracking-widest flex items-center gap-3">
-                <FaFutbol className="text-[var(--color-primary)]" />
-                <span className="hidden sm:inline">FootyQuiz</span>
-              </h1>
-              <p className="text-[var(--color-text-muted)] text-sm lg:text-lg">Room id: {room}</p>
-            </div>
-
             <ToastContainer />
 
            
@@ -150,6 +142,15 @@ function App() {
 
              
               <div className="flex-1 max-w-2xl order-1 lg:order-2">
+                {/* Header aligned with questionnaire */}
+                <div className="w-full flex flex-col items-center mb-6">
+                  <h1 className="text-3xl lg:text-4xl font-extrabold text-[var(--color-primary)] mb-4 tracking-widest flex items-center justify-center gap-3">
+                    <FaFutbol className="text-[var(--color-primary)]" />
+                    <span>FootyQuiz</span>
+                  </h1>
+                  <p className="text-[var(--color-text-muted)] text-sm lg:text-lg">Room id: {room}</p>
+                </div>
+
                 {question ? (
                   <div className="quiz-div w-full">
                     <p className="text-right text-[var(--color-accent)] mb-4 text-sm lg:text-lg flex items-center gap-2 justify-end">
