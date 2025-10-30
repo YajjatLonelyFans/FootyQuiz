@@ -10,6 +10,7 @@ export default defineConfig({
   ],
   preview: {
     host: true,
-    port: 10000
+    port: 10000,
+    allowedHosts:"footyquiz-1.onrender.com",
   }
 })
